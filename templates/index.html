@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Portfolio
+{% endblock %}
+
+{% block main %}
+    <h1>Your Portfolio</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Shares</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stocks %}
+            <tr>
+                <td><details>
+                    <summary>{{ stock.symbol }}</summary>
+                    <div id="details">
+                     <form action="/trade" method="post" class="form-inline">
+                        <input type="hidden" name="symbol" class="form-control mx-auto w-auto" value="{{ stock.symbol }}">
+                        <select name="action" class="form-control mx-1" required>
+                            <option value="" disabled selected>__Select__</option>
+                            <option value="buy">Buy</option>
+                            <option value="sell">Sell</option>
+                        </select>
+                        <input type="number" name="shares" class="form-control mx-auto w-auto" min="1" max="{{ stock.shares }}" placeholder="Shares" class="form-control mx-1" required>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                     </form>
+                    </div>
+                  </details></td>
+                <td>{{ stock.shares }}</td>
+                <td>{{ stock.price | usd }}</td>
+                <td>{{ stock.total | usd }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h2>Total Portfolio Value: {{ total_value | usd }}</h2>
+{% endblock %}
